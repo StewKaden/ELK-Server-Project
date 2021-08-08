@@ -1,0 +1,45 @@
+﻿---
+- name: Pentest Playbook
+  hosts: webservers
+  become: true
+  tasks:
+
+
+  - name: Uninstall apache2
+    apt:
+      name: apache2
+      state: absent
+
+
+  - name: docker.io
+    apt:
+      update_cache: yes
+      name: docker.io
+      state: present
+
+
+  - name: Install Python pip3
+    apt:
+      force_apt_get: yes
+      name: python3-pip
+      state: present
+
+
+  - name: Dock Install Python Docker Module
+    pip:
+      name: docker
+      state: present
+
+
+  - name: docker-container install
+    docker_container:
+      name: dvwa
+      image: cyberxsecurity/dvwa
+      published_ports: 80:80
+      state: started
+
+
+  - name: Enable Docker
+    systemd:
+      name: docker
+      enabled: yes
